@@ -1,347 +1,195 @@
+/* --- VARIABLES Y CONFIGURACIÓN GLOBAL --- */
+:root {
+    --font-family: 'Poppins', sans-serif;
+    /* Tema Claro (Default) */
+    --bg-color-start: #74EBD5;
+    --bg-color-end: #9FACE6;
+    --glass-bg: rgba(255, 255, 255, 0.3);
+    --glass-border: rgba(255, 255, 255, 0.5);
+    --text-color: #1a1a2e;
+    --button-bg: rgba(255, 255, 255, 0.5);
+    --button-hover-bg: rgba(255, 255, 255, 0.7);
+    --operator-bg: #89CFF0;
+    --operator-text: #003366;
+    --equal-bg: #4CAF50;
+    --equal-text: white;
+    --special-bg: #ff8c42;
+    --danger-bg: #e74c3c;
+    --danger-text: white;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+}
+
+body.dark-mode {
+    /* Tema Oscuro */
+    --bg-color-start: #232526;
+    --bg-color-end: #414345;
+    --glass-bg: rgba(0, 0, 0, 0.2);
+    --glass-border: rgba(255, 255, 255, 0.2);
+    --text-color: #f0f0f0;
+    --button-bg: rgba(255, 255, 255, 0.1);
+    --button-hover-bg: rgba(255, 255, 255, 0.2);
+    --operator-bg: #0077b6;
+    --operator-text: white;
+    --equal-bg: #2ecc71;
+    --special-bg: #f39c12;
+    --danger-bg: #c0392b;
+    --shadow-color: rgba(0, 0, 0, 0.4);
+}
+
 body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            text-align: center;
-            margin: 50px;
-            background-image: repeating-linear-gradient(0deg, rgba(0,0,0, 0.08) 0px, rgba(0,0,0, 0.08) 1px,transparent 1px, transparent 16px),repeating-linear-gradient(90deg, rgba(0,0,0, 0.08) 0px, rgba(0,0,0, 0.08) 1px,transparent 1px, transparent 16px),linear-gradient(90deg, rgb(241,241,241),rgb(241,241,241));            
-        }
-            h2 {
-            color: #333;
-        }
-        #calculator {
-            max-width: 400px;
-            margin: 0 auto;
-            background-color: #fff;
-            border-radius: 8px;
-            padding: 20px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
-            transition: box-shadow 0.3s ease-in-out;
-            animation: fadeIn 1s ease-in-out;
-        }
-        input[type="text"] {
-            width: 100%;
-            padding: 15px;
-            margin-bottom: 15px;
-            font-size: 24px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            box-sizing: border-box;
-            transition: box-shadow 0.3s ease-in-out;
-        }
-        input[type="button"] {
-            width: 60px;
-            height: 60px;
-            font-size: 20px;
-            margin: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #eee;
-            cursor: pointer;
-            transition: background-color 0.3s, transform 0.2s ease-in-out;
-            animation: keyPress 0.5s ease-in-out;
-        }
-        input[type="button"]:hover {
-            background-color: #ddd;
-        }
-        input[type="button"].operator {
-            background-color: rgb(56, 56, 219);
-            color: #fff;
-        }
-        input[type="button"].operator:hover {
-            background-color: rgb(102, 115, 255);
-        }
-        input[type="text"]:focus {
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
-        }
-        input[type="button"]:active {
-            transform: scale(0.95);
-        }
-        input[type="button"]::after {
-            content: '\1F3B5'; /* Emoji musical note */
-            font-size: 24px;
-            margin-left: 5px;
-            opacity: 0;
-            transition: opacity 0.2s ease-in-out;
-        }
-        input[type="button"]:active::after {
-            opacity: 1;
-        }
-        .calculate-animation {
-            animation: calculateAnimation 0.5s;
-        }
-        @keyframes calculateAnimation {
-            0% {
-                transform: scale(1);
-            }
-            50% {
-                transform: scale(1.1);
-            }
-            100% {
-                transform: scale(1);
-            }
-        }
-        @keyframes keyPress {
-            0% {
-                transform: translateY(0);
-            }
-            50% {
-                transform: translateY(-5px);
-            }
-            100% {
-                transform: translateY(0);
-            }
-        }
-        @keyframes fadeIn {
-            from {
-                opacity: 0;
-            }
-            to {
-                opacity: 1;
-            }
-        }
-/* ... (estilos existentes) ... */
-        #history {
-            margin-top: 20px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 8px;
-            background-color: #f4f4f4;
-        }
-        #history ul {
-            list-style-type: none;
-            padding: 0;
-        }
-        #history ul li {
-            margin-bottom: 5px;
-        }
-.container {
-    max-width: 800px;
-    margin: 20px auto;
-    background-color: #fff;
-    padding: 20px;
-    border-radius: 8px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    font-family: var(--font-family);
+    margin: 0;
+    padding: 2rem;
+    background: linear-gradient(45deg, var(--bg-color-start), var(--bg-color-end));
+    background-size: 400% 400%;
+    color: var(--text-color);
+    min-height: 100vh;
+    box-sizing: border-box;
+    animation: gradientAnimation 15s ease infinite;
+    transition: background 0.5s ease;
 }
-/* Estilos para los botones */
-button {
-    padding: 10px 15px;
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
+
+@keyframes gradientAnimation {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* --- CONTENEDOR PRINCIPAL --- */
+.main-container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 2rem;
+    animation: fadeIn 1s ease-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.glass-container {
+    background: var(--glass-bg);
+    border-radius: 20px;
+    padding: 1.5rem;
+    box-shadow: 0 8px 32px 0 var(--shadow-color);
+    backdrop-filter: blur(10px);
+    -webkit-backdrop-filter: blur(10px);
+    border: 1px solid var(--glass-border);
+    transition: all 0.3s ease;
+}
+
+.calculator-container { flex-basis: 350px; max-width: 350px; }
+
+.calculator__display {
+    background: rgba(0,0,0,0.2);
+    color: white;
+    font-size: 2.5rem;
+    padding: 1.5rem 1rem;
+    border-radius: 10px;
+    text-align: right;
+    margin-bottom: 1rem;
+    word-wrap: break-word;
+    word-break: break-all;
+    min-height: 40px;
+    transition: all 0.2s ease;
+}
+
+.calculator__display.error {
+    animation: shake 0.4s;
+    color: #ff8c42;
+}
+@keyframes shake { 0%, 100% {transform: translateX(0);} 25% {transform: translateX(-5px);} 75% {transform: translateX(5px);}}
+
+
+.calculator__keys {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+}
+
+.calculator__keys button {
+    height: 60px;
+    font-size: 1.5rem;
     border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
+    border-radius: 10px;
+    background: var(--button-bg);
+    color: var(--text-color);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    font-weight: 500;
 }
-button:hover {
-    background-color: #007bff;
-    color: #fff;
+
+.calculator__keys button:hover {
+    background: var(--button-hover-bg);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 15px var(--shadow-color);
 }
-/* Estilos para la lista de historial */
-#history {
-    margin-top: 20px;
+
+.calculator__keys button:active {
+    transform: translateY(0px) scale(0.98);
+    box-shadow: none;
 }
-h3 {
-    font-size: 18px;
-    margin-bottom: 10px;
-}
+.key-zero { grid-column: span 2; }
+.key--operator { background: var(--operator-bg); color: var(--operator-text); }
+.key--special { background: var(--special-bg); color: var(--equal-text); }
+.key--equal { grid-column: 4 / 5; grid-row: 4 / 6; height: auto; background: var(--equal-bg); color: var(--equal-text); }
+
+
+/* --- HISTORIAL --- */
+.history-container { flex-grow: 1; min-width: 300px; }
+.history-controls { display: flex; gap: 10px; margin-bottom: 1rem; }
+.history-controls button { flex-grow: 1;}
+
 #historyList {
-    list-style-type: none;
-    padding: 0;
+    list-style: none; padding: 0; max-height: 250px; overflow-y: auto;
 }
 #historyList li {
-    margin-bottom: 8px;
-    font-size: 14px;
-    color: #333;
+    padding: 0.75rem; border-radius: 8px; margin-bottom: 0.5rem; cursor: pointer; transition: background 0.2s ease;
 }
-/* Estilos adicionales según sea necesario */
-#clearButton {
-    width: 320px; /* Puedes ajustar el valor según tus preferencias */
-    color: whitesmoke;
-    background-color: #ff0000ed;
+#historyList li:hover { background: var(--button-hover-bg); }
+#historyList li.active { background: var(--operator-bg); color: var(--operator-text); font-weight: 500;}
+
+
+/* --- REPRODUCTOR --- */
+.music-container { flex-basis: 100%; max-width: 450px; }
+audio, select {
+    width: 100%; margin-top: 1rem; border-radius: 8px; border: none; background: var(--button-bg); color: var(--text-color);
 }
-/*Boton igual*/
-#calculateButton {
-    background-color: rgb(0, 128, 98);
-    color: white;
-    border: none;
-    width: 320px;
+select { padding: 0.5rem; }
+
+/* --- BOTONES GENERALES --- */
+button {
+    padding: 0.5rem 1rem; border-radius: 8px; border: none; cursor: pointer; background: var(--button-bg); color: var(--text-color); transition: all 0.2s ease;
 }
-#calculateButton:hover {
-    background-color: #4CAF50; /* Cambia a otro tono de verde */
-    /* Agrega cualquier otra propiedad CSS para el efecto hover multicolor */
+button:hover { background: var(--button-hover-bg); }
+button.danger { background-color: var(--danger-bg); color: var(--danger-text); }
+
+/* --- INTERRUPTOR DE TEMA --- */
+.theme-switcher-wrapper { position: absolute; top: 20px; right: 20px; z-index: 100; }
+.theme-switcher { position: relative; display: inline-block; width: 60px; height: 34px; }
+.theme-switcher input { opacity: 0; width: 0; height: 0; }
+.slider {
+    position: absolute; cursor: pointer; top: 0; left: 0; right: 0; bottom: 0; background-color: #ccc; transition: .4s; border-radius: 34px; background-color: var(--operator-bg);
 }
-/* Estilo básico para el nuevo botón de borrado de un dígito */
-#deleteButton {
-    background-color: #36f436; /* Rojo */
-    color: white;
-    border: none;
-    padding: 10px 20px;
-    cursor: pointer;
+.slider:before {
+    position: absolute; content: ""; height: 26px; width: 26px; left: 4px; bottom: 4px; background-color: white; transition: .4s; border-radius: 50%;
 }
-#deleteButton:hover {
-    background-color: #fd6464; /* Cambia a otro tono de rojo al pasar el mouse sobre el botón */
+input:checked + .slider { background-color: #232526; }
+input:checked + .slider:before { transform: translateX(26px); }
+
+.slider-icon {
+    position: absolute; top: 50%; transform: translateY(-50%); font-size: 16px; pointer-events: none; transition: opacity 0.4s;
 }
-#clear {
-    margin: 5px;
-    font-size: 16px;
-    cursor: pointer;
-    border: none;
-    border-radius: 5px;
-    transition: background-color 0.3s ease;
-    background-color: #ff0000;
+.sun { left: 8px; opacity: 1; }
+.moon { right: 8px; opacity: 0; }
+input:checked + .slider .sun { opacity: 0; }
+input:checked + .slider .moon { opacity: 1; }
+
+@media (max-width: 768px) {
+    body { padding: 1rem; }
+    .main-container { flex-direction: column; align-items: center; }
+    .glass-container { width: 90%; max-width: 500px;}
+    .calculator-container { max-width: none; }
 }
-#clear:hover {
-    background-color: #b72525b3;
-    color: #fff;
-}
-/* Estilos para tabletas */
-@media screen and (min-width: 600px) and (max-width: 1024px) {
-    body {
-        margin: 20px;
-    }
-    #calculator {
-        max-width: 80%;
-    }
-    input[type="text"] {
-        font-size: 18px;
-    }
-    input[type="button"] {
-        width: 50px;
-        height: 50px;
-        font-size: 16px;
-    }
-    #clearButton {
-        width: 60%;
-    }
-    #calculateButton {
-        width: 60%;
-    }
-}
-/* Estilos para pantallas pequeñas (menos de 600px) */
-@media screen and (max-width: 599px) {
-    body {
-        margin: 10px;
-    }
-    #calculator {
-        max-width: 90%;
-        padding: 10px;
-    }
-    input[type="text"] {
-        font-size: 16px;
-    }
-    input[type="button"] {
-        width: 40px;
-        height: 40px;
-        font-size: 14px;
-    }
-    h3 {
-        font-size: 16px;
-    }
-    #historyList li {
-        font-size: 12px;
-    }
-    #clearButton {
-        width: 220px; /* Puedes ajustar el valor según tus preferencias */
-    }
-    #calculateButton {
-        background-color: rgb(0, 128, 98);
-        color: white;
-        border: none;
-        width: 220px;
-    }
-}
-/* Flex item */
-.flex-container .flex-item {
-    background-color: white;
-    border: 2px solid red; /* Cambiado a "2px solid" para especificar un contorno de 2 píxeles de ancho */
-    border-color: black; /* Agregado para establecer el color del contorno a negro */
-}
- 
-    .flex-container {
-      display: flex;
-      flex-direction: row; /* Establece la dirección de los elementos en fila */
-      gap: 20px; /* Espaciado entre elementos */
-      margin-top: 20px;
-    }
-    .flex-item {
-      flex: 1; /* Distribuye el espacio disponible de manera uniforme entre los elementos */
-      padding: 10px; /* Ajusta el espaciado interno según sea necesario */
-      box-sizing: border-box; /* Incluye el relleno y el borde en el tamaño total del elemento */
-    }
-    @media (max-width: 600px) {
-      .flex-container {
-        flex-direction: column; /* Cambia la dirección a columna cuando el ancho de la pantalla es menor o igual a 600px */
-      }
-    }
-    #history {
-      margin-top: 20px;
-      width: 100%;
-      transform:scale(0.92) translatex(-12px);
-    perspective:73px;
-    }
-    #historyList {
-      list-style-type: none;
-      padding: 0;
-      margin: 0;
-    }
-    #history h3 {
-      margin-bottom: 5px;
-    }
-    button {
-      margin: 5px;
-      padding: 5px;
-      cursor: pointer;
-    }
-    input[type="button"] {
-      width: 50px;
-      height: 30px;
-      margin: 5px;
-      cursor: pointer;
-    }
-/* ... (Estilos del reproductor) ... */
-    #reproductorBox {
-        margin-top: 20px;
-    }
-    
-    select {
-        width: 100%;
-        padding: 10px;
-        margin-bottom: 20px;
-        border: 1px solid #3498db;
-        border-radius: 5px;
-        background-color: #ecf0f1;
-        color: #2c3e50;
-        font-size: 16px;
-        transition: background-color 0.3s, color 0.3s;
-    }
-    
-    select option:checked {
-        background-color: #3498db;
-        color: white;
-    }
-    
-    select option:hover {
-        background-color: #2980b9;
-        color: white;
-    }
-    
-    audio {
-        width: 100%;
-        margin-top: 10px;
-    }
-    
-    /* Rainbow effect for hover (may not be universally supported) */
-    @keyframes rainbow {
-        0% { color: #ff0000; }
-        16% { color: #ff9900; }
-        33% { color: #ffff00; }
-        50% { color: #33cc33; }
-        66% { color: #3399ff; }
-        83% { color: #cc66ff; }
-        100% { color: #ff0000; }
-    }
-    
-    select option:hover {
-        background-color: #2980b9;
-        color: white;
-        animation: rainbow 1s infinite;
-    }

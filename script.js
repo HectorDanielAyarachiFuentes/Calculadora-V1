@@ -1,124 +1,180 @@
-// Funciones de la calculadora
-function addToDisplay(value) {
-    const display = document.getElementById('display');
-    const currentValue = display.value;
-    // Verificar si el último carácter es un operador
-    const lastCharIsOperator = isOperator(currentValue.charAt(currentValue.length - 1));
-    // Verificar si el valor que se está agregando es un operador
-    const newValueIsOperator = isOperator(value);
-    // Mostrar solo un signo si el último carácter también es un operador
-    if (lastCharIsOperator && newValueIsOperator) {
-        // Reemplazar el último operador con el nuevo
-        display.value = currentValue.slice(0, -1) + value;
-    } else {
-        // Agregar el valor normalmente
-        display.value += value;
-    }
-}
-// Función para borrar un dígito a la vez
-function deleteLastDigit() {
-    const display = document.getElementById('display');
-    display.value = display.value.slice(0, -1);
-}
-// Función auxiliar para verificar si un carácter es un operador
-function isOperator(char) {
-    return ['+', '-', '*', '/'].includes(char);
-}
-function calculate() {
-    try {
-        const expression = document.getElementById('display').value;
-        const result = eval(expression);
-        document.getElementById('display').value = result;
-        animateDisplay();
-        // Guardar historial y datos en Local Storage
-        saveToLocalStorage(expression, result);
-    } catch (error) {
-        document.getElementById('display').value = 'Error';
-    }
-}
-function clearDisplay() {
-    document.getElementById('display').value = '';
-}
-// Función para animar el display (debes implementarla)
-function animateDisplay() {
-    // Implementa la lógica de animación si es necesario
-}
-// Función para guardar en el Local Storage (debes implementarla)
-function saveToLocalStorage(expression, result) {
-    // Implementa la lógica de guardado en el Local Storage si es necesario
-}
-        // Funciones del historial
-        let history = [];
-        let currentIndex = -1;
-        function goBack() {
-            if (currentIndex > 0) {
-                currentIndex--;
-                loadFromHistory();
-            }
-        }
-        function goForward() {
-            if (currentIndex < history.length - 1) {
-                currentIndex++;
-                loadFromHistory();
-            }
-        }
-        function saveToLocalStorage(expression, result) {
-            // Guardar historial en Local Storage
-            history.push({ expression, result });
-            currentIndex = history.length - 1;
-            updateLocalStorage();
-        }
-        function loadFromHistory() {
-            if (currentIndex >= 0 && currentIndex < history.length) {
-                document.getElementById('display').value = history[currentIndex].expression;
-            }
-        }
-        function displayHistory() {
-            const historyList = document.getElementById('historyList');
-            historyList.innerHTML = ''; // Limpiar la lista
-            history.forEach((entry, index) => {
-                const listItem = document.createElement('li');
-                listItem.textContent = `Cuenta ${index + 1}: ${entry.expression} = ${entry.result}`;
-                historyList.appendChild(listItem);
-            });
-        }
-        function updateLocalStorage() {
-            // Actualizar Local Storage
-            localStorage.setItem('calculationHistory', JSON.stringify(history));
-            localStorage.setItem('currentIndex', currentIndex);
-            // Mostrar historial
-            displayHistory();
-        }
-        // Animación de la pantalla de la calculadora
-        function animateDisplay() {
-            const display = document.getElementById('display');
-            display.classList.remove('calculate-animation');
-            void display.offsetWidth; // Triggers reflow
-            display.classList.add('calculate-animation');
-        }
-        // Cargar historial desde Local Storage al cargar la página
-        window.onload = function() {
-            const storedHistory = JSON.parse(localStorage.getItem('calculationHistory')) || [];
-            const storedIndex = parseInt(localStorage.getItem('currentIndex')) || -1;
-            if (storedHistory.length > 0) {
-                history = storedHistory;
-                currentIndex = storedIndex;
-                loadFromHistory();
-                displayHistory();
-            }
-        };
+document.addEventListener('DOMContentLoaded', () => {
+
+    const displayElement = document.getElementById('display');
+    const keysContainer = document.querySelector('.calculator__keys');
+
+    // --- MANEJO CENTRAL DE EVENTOS DE BOTONES (VERSIÓN CORREGIDA) ---
+    keysContainer.addEventListener('click', (event) => {
+        if (!event.target.matches('button')) return;
+
+        const button = event.target;
+        const { action, value } = button.dataset;
+        const currentDisplay = displayElement.textContent;
+        const lastChar = currentDisplay.slice(-1);
         
-        // Borra el historial desde Local Storage al cargar la página
-    function clearHistory() {
-        history = [];
-        currentIndex = -1;
-        updateLocalStorage();
+        // Si hay un error, cualquier botón (excepto historial) limpia el display
+        if (displayElement.classList.contains('error')) {
+            clearDisplay();
+        }
+
+        // Si es un número (value existe)
+        if (value) {
+            if (currentDisplay === '0') {
+                displayElement.textContent = value;
+            } else {
+                displayElement.textContent += value;
+            }
+        }
+
+        // Si es una acción (operador, clear, etc.)
+        if (action) {
+            switch (action) {
+                case 'add':
+                case 'subtract':
+                case 'multiply':
+                case 'divide':
+                    // ✨✨¡AQUÍ ESTÁ LA CORRECCIÓN PRINCIPAL!✨✨
+                    // Impide añadir operadores consecutivos.
+                    const operators = ['+', '-', '×', '÷'];
+                    if (operators.includes(lastChar)) {
+                        // Si el último caracter es un operador, lo reemplaza
+                        displayElement.textContent = currentDisplay.slice(0, -1) + getOperatorSymbol(action);
+                    } else {
+                        // Si no, lo añade
+                        displayElement.textContent += getOperatorSymbol(action);
+                    }
+                    break;
+                
+                case 'decimal':
+                    // Lógica mejorada para el punto decimal
+                    const segments = currentDisplay.split(/[\+\-×÷]/);
+                    if (!segments[segments.length - 1].includes('.')) {
+                        displayElement.textContent += '.';
+                    }
+                    break;
+
+                case 'calculate':
+                    calculate();
+                    break;
+                case 'clear':
+                    clearDisplay();
+                    break;
+                case 'delete':
+                    deleteLastDigit();
+                    break;
+            }
+        }
+    });
+
+    // Función auxiliar para obtener el símbolo del operador
+    function getOperatorSymbol(action) {
+        const map = { add: '+', subtract: '-', multiply: '×', divide: '÷' };
+        return map[action];
     }
-    // Puedes llamar a esta función desde un botón en tu interfaz
-    // Por ejemplo, añadiendo un botón con onclick="clearHistoryButton()"
-    function clearHistoryButton() {
-        const confirmation = confirm("¿Estás seguro de que quieres borrar el historial?");
-        if (confirmation) {
-            clearHistory();
+    
+    // Función para limpiar display
+    function clearDisplay() {
+        displayElement.textContent = '0';
+        displayElement.classList.remove('error');
+    }
+
+    // Función para borrar el último caracter
+    function deleteLastDigit() {
+        if (displayElement.textContent.length > 1 && displayElement.textContent !== 'Error') {
+            displayElement.textContent = displayElement.textContent.slice(0, -1);
+        } else {
+            displayElement.textContent = '0';
+        }
+         displayElement.classList.remove('error');
+    }
+
+    // Función para calcular el resultado de forma segura
+    function calculate() {
+        try {
+            let expression = displayElement.textContent
+                .replace(/×/g, '*')
+                .replace(/÷/g, '/');
+            
+            // Ignorar el último operador si la expresión termina con uno
+            if (['+', '-', '*', '/'].includes(expression.slice(-1))) {
+                expression = expression.slice(0, -1);
+            }
+
+            const result = new Function('return ' + expression)();
+            
+            if (!isFinite(result)) {
+                throw new Error("División por cero");
+            }
+            
+            const finalResult = parseFloat(result.toFixed(7));
+            saveHistory(displayElement.textContent, finalResult); // Guardar expresión original
+            displayElement.textContent = finalResult;
+
+        } catch (error) {
+            displayElement.textContent = 'Error';
+            displayElement.classList.add('error');
         }
     }
+    
+    // ===============================================
+    // CÓDIGO DEL HISTORIAL, TEMA Y MÚSICA (Sin cambios)
+    // ===============================================
+
+    const historyList = document.getElementById('historyList');
+    const historyBackButton = document.getElementById('historyBack');
+    const historyForwardButton = document.getElementById('historyForward');
+    const historyClearButton = document.getElementById('historyClear');
+    let history = [];
+    let historyIndex = -1;
+
+    function saveHistory(expression, result) {
+        if (history.length > 20) history.shift();
+        history.push({ expression, result });
+        historyIndex = history.length - 1;
+        updateHistoryStorage();
+        renderHistory();
+    }
+    function renderHistory() {
+        historyList.innerHTML = '';
+        history.forEach((entry, index) => {
+            const li = document.createElement('li');
+            li.textContent = `${entry.expression} = ${entry.result}`;
+            li.dataset.index = index;
+            if(index === historyIndex) li.classList.add('active');
+            historyList.appendChild(li);
+        });
+    }
+    function updateHistoryStorage() { localStorage.setItem('calc_history', JSON.stringify(history)); }
+    function loadHistoryFromStorage() {
+        const stored = JSON.parse(localStorage.getItem('calc_history'));
+        if (stored) { history = stored; historyIndex = history.length - 1; renderHistory(); }
+    }
+    historyBackButton.addEventListener('click', () => { if (historyIndex > 0) { historyIndex--; renderHistory(); } });
+    historyForwardButton.addEventListener('click', () => { if (historyIndex < history.length - 1) { historyIndex++; renderHistory(); } });
+    historyClearButton.addEventListener('click', () => { if(confirm('¿Borrar historial?')) { history = []; historyIndex = -1; updateHistoryStorage(); renderHistory(); } });
+    historyList.addEventListener('click', (e) => {
+        if(e.target.matches('li')) { const i = parseInt(e.target.dataset.index); historyIndex = i; displayElement.textContent = history[i].result.toString(); renderHistory();}
+    });
+
+
+    const themeToggle = document.getElementById('themeToggle');
+    themeToggle.addEventListener('change', () => {
+        document.body.classList.toggle('dark-mode');
+        localStorage.setItem('calc_theme', document.body.classList.contains('dark-mode') ? 'dark' : 'light');
+    });
+    function loadTheme() {
+        if (localStorage.getItem('calc_theme') === 'dark') { document.body.classList.add('dark-mode'); themeToggle.checked = true; }
+    }
+
+
+    const audioPlayer = document.getElementById('audioPlayer');
+    const trackSelect = document.getElementById('trackSelect');
+    trackSelect.addEventListener('change', () => { audioPlayer.src = trackSelect.value; audioPlayer.play(); });
+    function initPlayer() { if (trackSelect.options.length > 0) audioPlayer.src = trackSelect.options[0].value; }
+
+
+    // --- INICIALIZACIÓN ---
+    loadHistoryFromStorage();
+    loadTheme();
+    initPlayer();
+});
