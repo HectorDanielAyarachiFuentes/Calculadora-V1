@@ -3,80 +3,96 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>🔮 Calculadora Galáctica 2.0 🔮</title>
+    <title>🔮 Calculadora Galáctica: Edición Definitiva 🔮</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700&family=Poppins:wght@300;400;500&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="./style.css">
 </head>
 <body>
-    <div class="theme-switcher-wrapper">
-        <label class="theme-switcher">
-            <input type="checkbox" id="themeToggle">
-            <span class="slider">
-                <span class="slider-icon sun">☀️</span>
-                <span class="slider-icon moon">🌙</span>
-            </span>
-        </label>
-    </div>
-
-    <main class="main-container">
-        <!-- Calculadora -->
-        <div class="glass-container calculator-container">
-            <div class="calculator">
-                <div class="calculator__display" id="display">0</div>
-                <div class="calculator__keys">
-                    <button class="key--special" data-action="clear">C</button>
-                    <button class="key--special" data-action="delete">⌫</button>
-                    <button class="key--operator" data-action="divide">÷</button>
-                    <button class="key--operator" data-action="multiply">×</button>
-                    
-                    <button data-value="7">7</button>
-                    <button data-value="8">8</button>
-                    <button data-value="9">9</button>
-                    <button class="key--operator" data-action="subtract">-</button>
-                    
-                    <button data-value="4">4</button>
-                    <button data-value="5">5</button>
-                    <button data-value="6">6</button>
-                    <button class="key--operator" data-action="add">+</button>
-
-                    <button data-value="1">1</button>
-                    <button data-value="2">2</button>
-                    <button data-value="3">3</button>
-                    <button class="key--equal" data-action="calculate">=</button>
-
-                    <button class="key-zero" data-value="0">0</button>
-                    <button data-action="decimal">.</button>
+    <div class="app-layout">
+        <!-- Columna Principal: Calculadora -->
+        <main class="calculator-grid">
+            <header class="calculator-header">
+                <div class="mode-switcher-container">
+                    <label class="mode-switcher">
+                        <input type="checkbox" id="modeToggle">
+                        <span class="mode-slider"></span>
+                    </label>
+                    <span id="modeLabel">Modo Básico</span>
                 </div>
-            </div>
-        </div>
+                <div class="theme-switcher-wrapper">
+                    <label class="theme-switcher">
+                        <input type="checkbox" id="themeToggle">
+                        <span class="slider">
+                            <span class="slider-icon sun">☀️</span>
+                            <span class="slider-icon moon">🌙</span>
+                        </span>
+                    </label>
+                </div>
+            </header>
 
-        <!-- Historial y Controles -->
-        <div class="glass-container history-container">
-            <h3>Historial</h3>
-            <div class="history-controls">
-                <button id="historyBack">Atrás</button>
-                <button id="historyForward">Adelante</button>
+            <div class="calculator-display">
+                <div data-previous-operand class="previous-operand"></div>
+                <div data-current-operand class="current-operand">0</div>
+            </div>
+
+            <!-- Teclas Científicas (Controladas por CSS Grid) -->
+            <button data-function="√" class="key key--sci">√</button>
+            <button data-function="^" class="key key--sci">x²</button>
+            <button data-function="sin" class="key key--sci">sin</button>
+            <button data-function="cos" class="key key--sci">cos</button>
+
+            <!-- Teclas de Memoria -->
+            <button data-action="memory-clear" class="key key--mem">MC</button>
+            <button data-action="memory-recall" class="key key--mem">MR</button>
+            <button data-action="memory-add" class="key key--mem">M+</button>
+            <button data-action="memory-subtract" class="key key--mem">M-</button>
+
+            <!-- Teclas Principales -->
+            <button data-action="clear" class="key key--special span-two">C</button>
+            <button data-action="delete" class="key key--special">⌫</button>
+            <button data-operator="÷" class="key key--operator">÷</button>
+
+            <button data-number="7" class="key">7</button>
+            <button data-number="8" class="key">8</button>
+            <button data-number="9" class="key">9</button>
+            <button data-operator="×" class="key key--operator">×</button>
+
+            <button data-number="4" class="key">4</button>
+            <button data-number="5" class="key">5</button>
+            <button data-number="6" class="key">6</button>
+            <button data-operator="-" class="key key--operator">-</button>
+
+            <button data-number="1" class="key">1</button>
+            <button data-number="2" class="key">2</button>
+            <button data-number="3" class="key">3</button>
+            <button data-operator="+" class="key key--operator">+</button>
+
+            <button data-number="0" class="key span-two">0</button>
+            <button data-number="." class="key">.</button>
+            <button data-action="equals" class="key key--equal">=</button>
+        </main>
+
+        <!-- Columna Secundaria: Paneles Auxiliares -->
+        <aside class="sidebar">
+            <div class="glass-container history-container">
+                <h3>Historial de Navegación</h3>
+                <ul id="historyList"></ul>
                 <button id="historyClear" class="danger">Borrar Historial</button>
             </div>
-            <ul id="historyList"></ul>
-        </div>
-        
-        <!-- Reproductor de Música -->
-        <div class="glass-container music-container">
-            <h3>Música Ambiental</h3>
-            <select id="trackSelect">
-                <!-- TU MÚSICA ORIGINAL ESTÁ DE VUELTA -->
-                <option value="Musica/NeYo  Because Of You Official Music Video.mp3">Ne-Yo- Because Of You</option>
-                <option value="Musica/Hey Good Lookin.mp3">Hank Williams - Hey, Good Lookin'</option>
-                <option value="Musica/The Isley Brothers  Between the Sheets.mp3">The Isley Brothers - Between the Sheets</option>
-            </select>
-            <audio id="audioPlayer" controls></audio>
-        </div>
-
-    </main>
-    
+            
+            <div class="glass-container music-container">
+                <h3>Centro de Comunicaciones</h3>
+                <select id="trackSelect">
+                    <option value="Musica/NeYo  Because Of You Official Music Video.mp3">Ne-Yo - Because Of You</option>
+                    <option value="Musica/Hey Good Lookin.mp3">Hank Williams - Hey, Good Lookin'</option>
+                    <option value="Musica/The Isley Brothers  Between the Sheets.mp3">The Isley Brothers - Between the Sheets</option>
+                </select>
+                <audio id="audioPlayer" controls></audio>
+            </div>
+        </aside>
+    </div>
     <script src="./script.js"></script>
 </body>
 </html>
